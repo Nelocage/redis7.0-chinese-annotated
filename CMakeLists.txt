@@ -1,6 +1,4 @@
-#制定cmake最小版本
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
-#项目名称
 project(redis VERSION 6.0)
 
 set(CMAKE_BUILD_TYPE "Debug")
@@ -31,13 +29,7 @@ execute_process(
         WORKING_DIRECTORY ${REDIS_ROOT}/src/
 )
 
-
-#子目录构建配置
 add_subdirectory(deps)
-#这个感觉不是重点先封着
-#add_subdirectory(src/modules)
-
-# redis源码文件，网上抄
 set(SRC_SERVER_TMP
         src/acl.c
         src/adlist.c
@@ -48,10 +40,12 @@ set(SRC_SERVER_TMP
         src/bio.c
         src/bitops.c
         src/blocked.c
+        src/call_reply.c
         src/childinfo.c
         src/cluster.c
         src/config.c
         src/connection.c
+        src/commands.c
         src/crc16.c
         src/crc64.c
         src/db.c
@@ -61,10 +55,12 @@ set(SRC_SERVER_TMP
         src/endianconv.c
         src/evict.c
         src/expire.c
+        src/eval.c
+        src/functions.c
+        src/function_lua.c
         src/geo.c
         src/geohash.c
         src/geohash_helper.c
-        # src/gopher.c
         src/hyperloglog.c
         src/intset.c
         src/latency.c
@@ -79,6 +75,8 @@ set(SRC_SERVER_TMP
         src/memtest.c
         src/module.c
         src/multi.c
+        src/monotonic.c
+        src/mt19937-64.c
         src/networking.c
         src/notify.c
         src/object.c
@@ -93,11 +91,12 @@ set(SRC_SERVER_TMP
         src/release.c
         src/replication.c
         src/rio.c
-        
-        # src/scripting.c
+        src/script.c
+        src/script_lua.c
         src/sds.c
         src/sentinel.c
         src/setproctitle.c
+        src/setcpuaffinity.c
         src/sha1.c
         src/sha256.c
         src/siphash.c
@@ -105,6 +104,7 @@ set(SRC_SERVER_TMP
         src/sort.c
         src/sparkline.c
         src/syncio.c
+        src/syscheck.c
         src/t_hash.c
         src/t_list.c
         src/t_set.c
@@ -119,31 +119,42 @@ set(SRC_SERVER_TMP
         src/zmalloc.c
         src/timeout.c
         src/crcspeed.c
+        src/resp_parser.c
         )
 set(SRC_SERVER src/server.c ${SRC_SERVER_TMP})
 
-# redis客户端源码文件，网上抄
+
 set(SRC_CLI
+        src/ae.c
         src/anet.c
         src/sds.c
         src/adlist.c
         src/redis-cli.c
         src/zmalloc.c
         src/release.c
+        src/monotonic.c
         src/anet.c
         src/ae.c
         src/crc64.c
         src/crcspeed.c
         src/dict.c
+        # src/debug.c
         src/crc16.c
+        src/cli_common.c
+        # src/t_list.c
+        src/mt19937-64.c
         src/siphash.c
+        src/redisassert.c
+#        src/object.c
+#        src/networking.c
+#        src/server.c
         )
 
 #这个指令不需要，不用自己制定可执行文件的输出位置，clion自己有 cmake-build-debug
 #set(EXECUTABLE_OUTPUT_PATH src)
 #库所在目录
-link_directories(deps/linenoise/ deps/lua/src deps/hiredis deps/hdr_histogram)
-
+link_directories(deps/linenoise/ deps/lua/src deps/hiredis )
+include_directories(deps/hdr_histogram)
 # redis-server
 add_executable(redis-server ${SRC_SERVER})
 target_include_directories(redis-server

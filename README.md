@@ -10,7 +10,7 @@ redis 仓库链接：https://github.com/redis/redis<br>
 点击右上角的 star⭐，可以持续关注我们仓库接下来的更新哦!🍭🍭
 
 ## 调试运行
-Redis代码是由Makefile进行构建且依赖Linux系统头文件，在Windows环境下无法编译成功。请尝试在Linux环境下进行编译操作
+Redis代码是由Makefile进行构建且依赖Linux系统头文件，推荐在Linux环境下进行编译操作
 
 ```shell
 git clone https://github.com/your-name/redis7.0-chinese-annotated.git

@@ -18,7 +18,10 @@
 #include "hdr_atomic.h"
 
 #ifndef HDR_MALLOC_INCLUDE
-#define HDR_MALLOC_INCLUDE "hdr_malloc.h"
+//这块修改过 原始是hdr_malloc.h
+//因为Makefile的特殊操作，使得hdr_malloc.h 也可以被正确识别，cmake用的不熟练，不知道怎么样实现同等功能
+//所以只能改成这种
+#define HDR_MALLOC_INCLUDE "hdr_redis_malloc.h"  
 #endif
 
 #include HDR_MALLOC_INCLUDE
