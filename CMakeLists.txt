@@ -142,19 +142,21 @@ set(SRC_CLI
 #这个指令不需要，不用自己制定可执行文件的输出位置，clion自己有 cmake-build-debug
 #set(EXECUTABLE_OUTPUT_PATH src)
 #库所在目录
-link_directories(deps/linenoise/ deps/lua/src deps/hiredis)
+link_directories(deps/linenoise/ deps/lua/src deps/hiredis deps/hdr_histogram)
 
 # redis-server
 add_executable(redis-server ${SRC_SERVER})
 target_include_directories(redis-server
         PRIVATE ${REDIS_ROOT}/deps/linenoise
         PRIVATE ${REDIS_ROOT}/deps/hiredis
-        PRIVATE ${REDIS_ROOT}/deps/lua/src)
+        PRIVATE ${REDIS_ROOT}/deps/lua/src
+        PRIVATE ${REDIS_ROOT}/deps/hdr_histogram)
 target_link_libraries(redis-server
         PRIVATE pthread
         PRIVATE m
         PRIVATE lua
         PRIVATE linenoise
+        PRIVATE hdr_histogram
         PRIVATE hiredis
         #这一步,是因为出现dlopen找不到等报错,dlopen,dlclose等是系统调用动态库的函数
         ${CMAKE_DL_LIBS}
