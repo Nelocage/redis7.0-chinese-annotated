@@ -134,6 +134,21 @@ unsigned long long estimateObjectIdleTime(robj *o) {
  * one key that can be evicted, if there is at least one key that can be
  * evicted in the whole database. */
 
+/* LRU 近似算法
+ *
+ * Redis 使用在常量内存中运行的 LRU 算法的近似值。 
+ * 每当有一个密钥过期时，我们都会对 N 个密钥（其中 N 非常小，通常在 5 左右）进行采样，以填充最佳密钥池，
+ * 以废弃 M 个密钥（池大小由 EVPOOL_SIZE 定义）。
+ *
+ * 如果采样的 N 个密钥比池中当前密钥之一更好，则将它们添加到好密钥池中，以便过期（具有旧访问时间的密钥）
+ *
+ * 填充池后，池中最好的密钥就会过期。
+ * 但是请注意，删除密钥时我们不会从池中删除密钥，因此池中可能包含不再存在的密钥。
+ *
+ * 当我们尝试逐出一个键，并且池中的所有条目都不存在时，我们会再次填充它。 
+ * 这次我们将确保池中至少有一个可以被驱逐的键，如果整个数据库中至少有一个可以被驱逐的键 */
+
+
 /* Create a new eviction pool. */
 /* 创建一个淘汰池 */
 void evictionPoolAlloc(void) {

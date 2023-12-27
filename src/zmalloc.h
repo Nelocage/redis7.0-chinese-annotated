@@ -103,7 +103,7 @@
 #if defined(USE_JEMALLOC) && defined(JEMALLOC_FRAG_HINT)
 #define HAVE_DEFRAG
 #endif
-
+#include <stddef.h>
 void *zmalloc(size_t size);
 void *zcalloc(size_t size);
 void *zcalloc_num(size_t num, size_t size);

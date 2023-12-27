@@ -8,6 +8,78 @@
 本项目灵感来源于《Redis设计与实现》作者黄健宏的redis3.0注释仓库：https://github.com/huangz1990/redis-3.0-annotated<br>
 redis 仓库链接：https://github.com/redis/redis<br>
 点击右上角的 star⭐，可以持续关注我们仓库接下来的更新哦!🍭🍭
+
+## 调试运行
+Redis代码是由Makefile进行构建且依赖Linux系统头文件，在Windows环境下无法编译成功。请尝试在Linux环境下进行编译操作
+
+```shell
+git clone https://github.com/your-name/redis7.0-chinese-annotated.git
+cd redis7.0-chinese-annotated
+make
+```
+最后输出如下，则代表`make`编译成功
+```shell
+All done, exiting.
+    CC commands.o
+    LINK redis-server
+    INSTALL redis-sentinel
+    CC redis-cli.o
+    CC redisassert.o
+    CC cli_common.o
+    LINK redis-cli
+    CC redis-benchmark.o
+    LINK redis-benchmark
+    INSTALL redis-check-rdb
+    INSTALL redis-check-aof
+
+Hint: It's a good idea to run 'make test' ;)
+```
+
+启动server端
+```
+src/redis-server
+```
+
+启动client端
+```
+src/redis-cli
+```
+
+> 如果本机已经有Redis进程运行，可以在`redis.conf`中修改端口 避开6379
+  使用其他端口启动服务端`src/redis-server redis.conf`,客户端命令则变成`src/redis-cli -p new_port`
+
+Redis文档上推荐使用GDB进行调试，GDB调试工具是时候，也不是很容易，lldb
+```json
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug",
+            //program是lldb attch的
+            "program": "src/redis-server",
+            "args": ["redis.conf"],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
+```
+
+vscode 插件 `clangd` `cmake` `cmake tools` `codelldb`
+安装后好，在vscode下方的项目栏中找到`clangd:idle` 点击之后，会有`Failed to find compilation database ` 证明缺少编译数据库
+
+### cmake配置
+https://blog.csdn.net/weixin_43328357/article/details/120259464
+
+https://github.com/mrssss/redis-5.0.8-cmake-in-clion/blob/master/CMakeLists.txt
+
+### The C++ compiler "/usr/bin/clang++" is not able to compile a simple test program. 如何解决
+https://www.mobibrw.com/2022/35743
+
 ## 项目进度：
 完成度标准介绍：
 <li>完成：文件中的每个有必要注释的结构体定义和每个函数都有中文注释。

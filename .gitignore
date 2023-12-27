@@ -34,9 +34,10 @@ tests/tls/*
 .prerequisites
 *.dSYM
 Makefile.dep
-.vscode/*
 .idea/*
 .ccls
 .ccls-cache/*
 compile_commands.json
 redis.code-workspace
+build/
+.cache/
